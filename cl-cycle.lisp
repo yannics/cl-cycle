@@ -63,6 +63,12 @@ The first value is the interlace cycle, the second value is the number of repeti
      (apply #'mapcar #'list (loop for e in motifs collect (loop repeat (/ n (length e)) append e)))
      (mapcar #'(lambda (x) (/ n x)) len))))
 
+(defmethod euclidean-rhythm ((n integer) (m integer) &key ratio)
+  "Euclidean rhythms allow spacing out <n> events (or onsets) across <m> positions (or pulses or beats) as evenly possible, according to the Bjorklund’s algorithm."
+  (if ratio
+      (let (r s) (loop for i in (cl-cycle::euclidean-rtm m n) if (= 1 i) do (push (length s) r) (setf s (list i)) else do (push i s)) (reverse (butlast (push (length s) r))))
+      (cl-cycle::euclidean-rtm m n)))
+
 ;;;-----------------------------------------------------------------
 
 (defmethod 10->n ((x integer) (n integer))

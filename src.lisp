@@ -1,4 +1,4 @@
-;;;  cl-cycle version 1.18.2
+;;;  cl-cycle version 1.19.3
 ;;;  use freely and at your own risk :)
 
 (in-package :cl-cycle)
@@ -411,6 +411,28 @@
   (let ((x (if (evenp n) (/ n 2) (+ (* 3 n) 1))))
     (if (member x r) (result-l (cons x r)) (collatz x (cons x r)))))
 
+;;;;------------------;;;;
+;;;; euclidean-rhythm ;;;;
+;;;;------------------;;;;
+
+(defun list! (x) (if (listp x) x (list x)))
+
+(defun euclidean-rtm (len n &optional head tail)
+  (when (or (and (bc-test len 0) (bc-test n 0) (>= len n)) (null len))
+    (if (and head (> 2 (length tail)))
+	(flatten (append head tail))
+	(euclidean-rtm nil nil
+		       ;; HEAD
+		       (if len
+			   (make-list n :initial-element 1)
+			   (loop for i in head for j in tail collect (append (list! i) (list! j))))
+		       ;; TAIL
+		       (if len
+			   (make-list (- len n) :initial-element 0)
+			   (cond ((> (length head) (length tail)) (make-list (- (length head) (length tail)) :initial-element (car head)))
+				 ((< (length head) (length tail)) (make-list (- (length tail) (length head)) :initial-element (car tail)))
+				 (t nil)))))))
+  
 ;;;;-------;;;;
 ;;;; utils ;;;;
 ;;;;-------;;;;

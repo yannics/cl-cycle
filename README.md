@@ -2,120 +2,112 @@
 
 Cycle generator
 
-This library generates cycle from a numeric sequence especially for musical purpose, like some composers have used in their respective compositions (see Olivier Messiaen with its symmetricals
-permutations, also Gérard Grisey or Jean Barraqué, and Iannis Xenakis for its « cribles rythmiques »). 
-This library extend this principle with mathematical algorithms, simply to explore this research field in a musical context.
+This library generates cycle from a numeric sequence especially for the musical purpose, like some composers have used in their respective compositions (see Olivier Messiaen with its symmetrical permutations, also Gérard Grisey or Jean Barraqué, and Iannis Xenakis for its 'cribles rythmiques'). 
+This library extends this principle with mathematical algorithms, simply to explore this research field in a musical context.
 
-> Briefly, this is some prospecting tools that fit in a heuristic perspective, intended to serve as a musical discourse, according to the theme of « cyclicity ».
-Thus, it is possible to consider construction of musical representations of mathematical ideas, recognizing that musical experience can not be reduced to a symbolic system. 
+> Briefly, this is some prospecting tools that fit in a heuristic perspective, intended to serve as a musical discourse, according to the theme of 'cyclicity'.
+Thus, it is possible to consider the construction of musical representations of mathematical ideas, recognizing that musical experience can not be reduced to a symbolic system. 
 In other words, it must be possible to report an association between network composition, performance and listening ... 
 
 
-## Algorithmes
+## Algorithms
 
 - - - -
-
-**Kaprekar**
 
 `[ KAPREKAR-CONSTANT ]`
 
-L'algorithme de Kaprekar consiste à associer à un nombre quelconque x un autre nombre K(x) généré de la façon suivante :
+The Kaprekar's algorithm consists to associate any number x to another number K(x) generated as follow:
+ 
+- According to the digits of x in radix n, one forms the number x1 by ranking in increasing order these digits and the number x2 by ranking in decreasing order.
 
-- On considère les chiffres de x, écrits en base n. On forme le nombre x1 en arrangeant ces chiffres dans l'ordre croissant et le nombre x2 en les arrangeant dans l'ordre décroissant.
-- On pose K(x) = x2 - x1.
+- Then K(x) = x2 - x1.
 
- On itère ensuite le processus jusqu'à obtenir une redondance cyclique.
+The process is iterated until a cyclic redundancy.
 
 - - - -
-
-**Cribles Rythmiques**
 
 `[ RHYTHMIC-SIEVE ]`
 
-Forme de métabole selon Iannis Xenakis, les cribles rythmiques reposent sur la construction d'une matrice afin de générer deux cycles: l'un par décalage horizontal (i), l'autre vertical (j).
+Kind of 'Métabole' according to Iannis Xenakis, rhythmic sieve rely on the construction of a matrix to generate two cycles: one by horizontal shift (i) and one by vertical shift (j).
 
 ![](img/img2.png)
 
-Cet exemple illustre le processus de permutation par un décalage vertical du crible dans la matrice.
+This example illustrates the process of permutation by a vertical shift of the sieve in the matrix.
 
 - - - -
-
-**Commentaires Cycliques**
 
 `[ PEA-PATTERN ]`
 
-Issue de suites autoréférentes décrites par l'allemand M. Hilgemeir, puis développer par John Conway notamment pour les suites de commentaires numériques infinis, les commentaires cycliques consistent à dénombrer les éléments d'une graine qui seront triés de façon croissante à chaque itération jusqu'à l'effectivité d'un cycle.
+Primarily developed by John Conway, the pea pattern is a variation of a look-and-say sequence by counting the elements of a seed from the lowest number to the highest iteratively until the effectiveness of a cycle.
 
 - - - -
 
-**Permutations Cycliques**
-
 `[ SYMMETRIC-GROUP ]`
 
-1. Aperçu mathématiques
+1. Mathematical overview
 >[http://math.univ-lyon1.fr/capes/IMG/pdf/cycles.pdf](http://math.univ-lyon1.fr/capes/IMG/pdf/cycles.pdf)
 
-2. Application musicale
+2. Musical application 
 >[http://www.entretemps.asso.fr/Nicolas/TextesNic/Barraque.html](http://www.entretemps.asso.fr/Nicolas/TextesNic/Barraque.html)
 
 - - - -
 
-**Permutations Symétriques**
-
 `[ SYMMETRIC-PERMUTATION ]`
 
-Mise en évidence par Olivier Messiaen, les permutations symétriques constituent un système de durées numérotées qui consiste à changer l'ordre de ses durées afin d'obtenir un nombre limité de cellules rythmiques.
+Highlighted by Olivier Messiaen, symmetric permutations constitute a system of numbered durations that consists in changing the order of its durations in order to obtain a limited number of rhythmic cells.
 
 ![](img/img1.png)
 
-L'ordre des durées (sur fond gris) permute suivant la procédure d'une liste donnée (sur fond blanc) qui est ré-ordonnée à chaque étape.
+The order of durations (on a gray background) is switched according to the procedure of a given list (on a white background) which is re-ordered at each step.
 
 - - - -
-
-**Permutations Circulaires**
 
 `[ CIRCULAR-PERMUTATION ]`
 
-Cet algorithme consiste à permuter une liste élément par élément dont la pertinence dans le cadre de cette librairie est d'effectuer un cycle par permutation circulaire d'une base donnée à une autre.
+This algorithm consists of moving the first element of a list to the tail of this list. This is done n times with n equal to the length of the list, whose relevance in the context of this library is to perform a circular permutation cycle from a given radix to another.
 
 - - - -
-
-**Cycle de Lorenz**
 
 `[ LORENZ-DISCRETISATION ]`
 
->[http://www.chaos-math.org/fr/chaos-vii-attracteurs-étranges](http://www.chaos-math.org/fr/chaos-vii-attracteurs-étranges)
+>[https://www.chaos-math.org/en/chaos-vii-strange-attractors.html](https://www.chaos-math.org/en/chaos-vii-strange-attractors.html)
 
-En 1970, Birman, Guckenheimer et Williams proposent un modèle de discrétisation dynamique des attracteurs de Lorenz qui se caractérise par une cyclicité de la périodicité des orbites par un retour à un point déjà franchi.
-Soit i un élément compris dans l'intervalle [0, 1] et I l'ensemble des points ordonnés dans le temps calculés à partir de i à t0, chaque point à t+1 est calculé de la façon suivante:
+In 1970, Birman, Guckenheimer, and Williams propose a model of dynamic discretization of Lorenz attractors, characterized by the periodicity of the orbits by a return to a point already crossed - i.e. a cycle.
 
-- i(t+1) = 2i(t) si i(t) est inférieur à 1;
-- i(t+1) = 2i(t)-1 si i(t) est supérieur à 1;
+Let i be an element in the interval [0, 1] and I the set of points ordered in time calculated from i to t0, each point at t+1 is calculated as follows:
 
-jusqu'à ce que i(tn+1) soit élément de I.
+- i(t+1) = 2i(t) if i(t) < 1;
+- i(t+1) = 2i(t)-1 if i(t) > 1;
+
+until i(tn+1) is element of I.
 
 ![](img/img3.png)
 
-Modèle de Birman, Guckenheimer et Williams. Au départ i=0.2.
+Model of Birman, Guckenheimer and Williams. Initially i=0.2.
 
 - - - -
-
-**Suite de Syracuse**
 
 `[ COLLATZ-CONJECTURE ]`
 
-En 1928, Lothar Collatz inventa une suite construite à partir d'un entier positif selon les règles suivantes:
+In 1928, Lothar Collatz invented a sequence built from a positive integer according to the following rules:
 
-- si x(n) est pair, alors x(n+1) est égal à x(n) divisé par 2;
-- si x(n) est impair, alors x(n+1) est égal à 1 plus x(n) multiplié par 3.
+- if x(n) is even, then x(n+1) is equal to x(n) divided by 2;
+- if x(n) is odd, then x(n+1) is equal to 1 plus x(n) multiplied by 3.
 
-La série ainsi construite finit toujours - jusqu'à preuve du contraire - par un cycle, dit trivial (4 2 1) pour les entiers positifs. Cette hypothèse est appelée conjecture de Syracuse.
+The series thus constructed always ends - until the contrary is proved - by a trivial cycle (4 2 1) for positive integers. This hypothesis is called Syracuse conjecture.
 
 - - - -
 
-**Cycle d'entrelacs**
-
 `[ INTERLACE-CYCLE ]`
 
-Reposant sur le principe des entrelacs d'ornementation, chaque motif est répété un certain nombre de fois selon le plus petit commun multiple afin de générer un cycle complet.
-Le résultat est une liste où chaque élément regroupe les permutations circulaires de chaque motif, soit un nombre de voix égal au nombre de motifs.
+Based on the principle of ornamental interlace, each pattern is repeated some times according to the least common multiple to generate a complete cycle.
+
+The result is a list where each element groups the circular permutations of each pattern, i.e. the number of voices equal to the number of patterns.
+
+- - - -
+
+`[ EUCLIDEAN-RHYTHM ]`
+
+>[http://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf](http://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf)
+
+Application of Bjorklund's algorithm of uniformly distributing some rhythmic impacts in a given interval of rhythmic units - according to Euclid's algorithm determining the greatest common divisor (GCD) [Book VII of the Elements of Euclid].

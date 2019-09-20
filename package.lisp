@@ -10,6 +10,7 @@
         :LORENZ-DISCRETISATION
         :COLLATZ-CONJECTURE
 	:INTERLACE-CYCLE
+	:EUCLIDEAN-RHYTHM
         
         :10->N
         :N->10  

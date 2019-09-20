@@ -60,7 +60,7 @@ Usage:
 	})
 };
 )
-
+/*
 // instance 1
 ~cl_cycle.value("~foo", "KAPREKAR-CONSTANT", [Array.rand(4, 0, 11), 12]);
 ~foo = ~foo.clipExtend(2);
@@ -71,3 +71,4 @@ a.stop;
 ~cl_cycle.value("~foo2", "INTERLACE-CYCLE", [Array.rand(3, 0, 11).postln, Array.rand(4, 0, 11).postln, Array.rand(5, 0, 11).postln]);
 b = Pbind(\degree, Pseq(~foo2.collect({|it| it.asSet.asArray}), inf), \dur,Pseq(~foo2.collect({|it| it.sum*0.04}), inf)).play;
 b.stop
+*/
