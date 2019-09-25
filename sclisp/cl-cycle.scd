@@ -13,6 +13,7 @@
 "LORENZ-DISCRETISATION"     float(1)
 "COLLATZ-CONJECTURE"        integer
 "INTERLACE-CYCLE"                             [rest] motifs
+"EUCLIDEAN-RHYTHM"          integer integer   [key] ratio
 --------------------------------------------------------------------------------
 "10->N"                     integer outputBase
 "N->10"                     integerArray inputBase
