@@ -1,4 +1,4 @@
-;;;  cl-cycle version 1.19.3
+;;;  cl-cycle version 1.20.2
 ;;;  use freely and at your own risk :)
 
 (in-package :cl-cycle)
@@ -55,8 +55,8 @@
 ;;;; kaprekar-constant ;;;;
 ;;;;-------------------;;;;
 
-(defun kaprek (l n)
-  (- (n->10-a (sort (copy-tree l) '>) n) (n->10-a (sort (copy-tree l) '<) n)))
+(defun a-kaprek (l n)
+  (- (a-n->10 (sort (copy-tree l) '>) n) (a-n->10 (sort (copy-tree l) '<) n)))
 
 (defun cycle-l (a)
   "The result is a list indicating the loop applied to the list a."
@@ -77,7 +77,7 @@
       (cycle-l a)
       (list (trans-l a) (cycle-l a))))
 
-(defun kaprekar-l (list-k &optional (n 10))
+(defun a-kaprekar-l (list-k &optional (n 10))
       (cond ((not (bc-test n 2)) nil)
 	    ((not (bc-test list-k 0)) nil)
 	    ((not (> n (apply #'max list-k))) nil)
@@ -86,7 +86,7 @@
 	       (loop until (member (car r) (cdr r) :test #'equalp)
 		  do
 		    (push
-		     (append (make-list (- (length list-k) (length (10->n-a (kaprek (car r) n) n))) :initial-element 0) (10->n-a (kaprek (car r) n) n))
+		     (append (make-list (- (length list-k) (length (a-10->n (a-kaprek (car r) n) n))) :initial-element 0) (a-10->n (a-kaprek (car r) n) n))
 		     r))
 	       (result-l r)))))
 
@@ -338,9 +338,9 @@
         ((not (bc-test n-circ 2)) nil)
         ((not (bc-test lst 0)) nil)
         (t
-         (let ((r (perm-circ (10->n-a (n->10-a lst n-lst) n-circ))) (s))
+         (let ((r (perm-circ (a-10->n (a-n->10 lst n-lst) n-circ))) (s))
            (dolist (e r (reverse s))
-             (push (10->n-a (n->10-a e n-circ) n-lst) s))))))
+             (push (a-10->n (a-n->10 e n-circ) n-lst) s))))))
 
 (defun p-c-b (lst n-lst n-circ)
   (perm-circ-base1 lst n-lst n-circ))
@@ -407,9 +407,9 @@
 ;;;; collatz-conjecture ;;;;
 ;;;;--------------------;;;;
 
-(defun collatz (n &optional (r (list n)))
+(defun a-collatz (n &optional (r (list n)))
   (let ((x (if (evenp n) (/ n 2) (+ (* 3 n) 1))))
-    (if (member x r) (result-l (cons x r)) (collatz x (cons x r)))))
+    (if (member x r) (result-l (cons x r)) (a-collatz x (cons x r)))))
 
 ;;;;------------------;;;;
 ;;;; euclidean-rhythm ;;;;
@@ -417,11 +417,11 @@
 
 (defun list! (x) (if (listp x) x (list x)))
 
-(defun euclidean-rtm (len n &optional head tail)
+(defun rtm-euclidean (len n &optional head tail)
   (when (or (and (bc-test len 0) (bc-test n 0) (>= len n)) (null len))
     (if (and head (> 2 (length tail)))
 	(flatten (append head tail))
-	(euclidean-rtm nil nil
+	(rtm-euclidean nil nil
 		       ;; HEAD
 		       (if len
 			   (make-list n :initial-element 1)
@@ -437,14 +437,14 @@
 ;;;; utils ;;;;
 ;;;;-------;;;;
 
-(defun n->10-a (lst n)
+(defun a-n->10 (lst n)
   (when (and (listp lst) (bc-test lst 0) (bc-test n 2))
     (let (r)
       (dolist (e lst r)
         (push (* e (expt n (- (- (length lst) 1) (length r)))) r))
       (apply '+ r))))
 
-(defun 10->n-a (x n)
+(defun a-10->n (x n)
   (when (and (bc-test x 0) (bc-test n 2))
     (let (r)
       (if (zerop x) (push 0 r)
@@ -454,15 +454,15 @@
               (setf x (floor x n))))
       r)))
 
-(defun mk-int-lst (lstIn short-lst)
+(defun a-mk-int-lst (lstIn short-lst)
   (loop for i in lstIn
         collect (cadr (assoc i (mapcar #'list short-lst (list-module (length short-lst))) :test #'equalp))))
 
-(defun mk-integer-by (lst)
+(defun a-mk-integer (lst)
   (when (listp lst)
     (if (bc-test lst nil)
-        (mk-int-lst lst (sort (copy-tree (remove-duplicates lst)) '<))
-      (mk-int-lst lst (remove-duplicates lst :from-end t :test #'equalp)))))
+        (tmp-mk-int-lst lst (sort (copy-tree (remove-duplicates lst)) '<))
+      (a-mk-int-lst lst (remove-duplicates lst :from-end t :test #'equalp)))))
 
 (defun comp-lst (lst n)
   (if (= n (length lst)) lst
@@ -471,7 +471,7 @@
           do
           (setf l (cons 0 l))) l)))
 
-(defun fill-lst (lst &optional m)
+(defun a-fill-lst (lst &optional m)
   (if (and (listp lst) (loop for e in lst always (listp e)))
     (let* ((w (loop for i in lst maximize (length i)))
            (n (if (and m (integerp m) (>= m w)) m w)))
