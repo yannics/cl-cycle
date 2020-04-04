@@ -319,6 +319,27 @@
       (loop until (member (car r) (cdr r) :test #'equalp)
 	 do (push (flatten (count-1 (car r))) r)) (result-l r))))
 
+;;;;------------------------;;;;
+;;;; kreuzspiel-permutation ;;;;
+;;;;------------------------;;;;
+
+(defun krpop (lst &optional ind)
+  (unless ind (setf ind (floor (/ (length lst) 2))))
+  (if (and (< 0 ind) (> (length lst) ind))
+      (let ((p1 (subseq lst 0 ind))
+	    (p2 (subseq lst ind)))
+	(append
+	 (cdr p1)
+	 (last p2)
+	 (list (car p1))
+	 (butlast p2)))
+      lst))
+
+(defun a-kreuzspiel (lst &optional ind res)
+  (if (member lst res :test #'equalp)
+      (reverse res)
+      (a-kreuzspiel (krpop lst ind) ind (cons lst res))))
+
 ;;;;----------------------;;;;
 ;;;; circular-permutation ;;;;
 ;;;;----------------------;;;;
