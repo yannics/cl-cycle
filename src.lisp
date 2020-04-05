@@ -1,4 +1,4 @@
-;;;  cl-cycle version 1.20.2
+;;;  cl-cycle version 1.20.5
 ;;;  use freely and at your own risk :)
 
 (in-package :cl-cycle)
