@@ -482,7 +482,7 @@
 (defun a-mk-integer (lst)
   (when (listp lst)
     (if (bc-test lst nil)
-        (tmp-mk-int-lst lst (sort (copy-tree (remove-duplicates lst)) '<))
+        (a-mk-int-lst lst (sort (copy-tree (remove-duplicates lst)) '<))
       (a-mk-int-lst lst (remove-duplicates lst :from-end t :test #'equalp)))))
 
 (defun comp-lst (lst n)
