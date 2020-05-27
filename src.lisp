@@ -1,4 +1,4 @@
-;;;  cl-cycle version 1.20.5
+;;;  cl-cycle version 1.20.6
 ;;;  use freely and at your own risk :)
 
 (in-package :cl-cycle)
@@ -499,5 +499,8 @@
       (loop for x in lst
 	 collect (comp-lst x n)))
     (if (and m (integerp m) (>= m (length lst))) (comp-lst lst m) lst)))
-	
+
+(defun >gray-code (n digit)
+  (a-fill-lst (a-10->n (logxor n (ash n -1)) 2) digit))
+
 ;;;------------------------------ END ------------------------------
