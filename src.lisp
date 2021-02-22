@@ -1,10 +1,29 @@
-;;;  cl-cycle version 1.20.6
+;;;  cl-cycle version 1.21.3
 ;;;  use freely and at your own risk :)
 
 (in-package :cl-cycle)
 
 ;;;---------------------------- LISP-CODE ----------------------------
 
+(defparameter *cycle-default-value* :seq
+  "This concerns only the algorithms KAPREKAR-CONSTANT, PEA-PATTERN, LORENZ-DISCRETISATION and COLLATZ-CONJECTURE.
+Possible keywords are:
+ :seq   ---> (append path cycle)
+ :lst   ---> (list path cycle)
+ :path  ---> path
+ :cycle ---> cycle
+The path (if it exists) is the prepended sequence of the cycle itself.
+Otherwise the result is a cycle if it exists, except for the SYMMETRIC-GROUP which is a list of cycles.")
+
+(defun singleton (lst) (and (listp lst) (= 1 (length lst))))
+
+(defun res-l (l kw)
+  (case kw
+    (:seq (if (singleton l) (car l) (apply #'append l)))
+    (:lst l)
+    (:path (unless (singleton l) (car l)))
+    (:cycle (car (last l)))))
+      
 ;; http://rosettacode.org/wiki/Prime_decomposition#Common_Lisp
 (defun factor (n)
   "Return a list of factors of n."
@@ -317,7 +336,8 @@
   (when (bc-test lst 0)
     (let ((r (list lst)))
       (loop until (member (car r) (cdr r) :test #'equalp)
-	 do (push (flatten (count-1 (car r))) r)) (result-l r))))
+	 do (push (flatten (count-1 (car r))) r))
+      (result-l r))))
 
 ;;;;------------------------;;;;
 ;;;; kreuzspiel-permutation ;;;;
@@ -499,8 +519,5 @@
       (loop for x in lst
 	 collect (comp-lst x n)))
     (if (and m (integerp m) (>= m (length lst))) (comp-lst lst m) lst)))
-
-(defun >gray-code (n digit)
-  (a-fill-lst (a-10->n (logxor n (ash n -1)) 2) digit))
 
 ;;;------------------------------ END ------------------------------

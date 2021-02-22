@@ -18,5 +18,7 @@
    
    :MK-INTEGER-LST
    :FILL-DIGIT-LST
+
+   :*cycle-default-value*
    )
   )

@@ -2,16 +2,15 @@
 
 ;;;---------------------------- COMMON-LISP ----------------------------
 
-(defgeneric kaprekar-constant (in &optional n)
-  (:documentation "Application of the Kaprekar's algorithm for a list of integers of base n.
-The result is the path leading to the cycle -- if it exists -- and the cycle itself.")
-  (:method ((in list) &optional (n 10))
-    (a-kaprekar-l in n))
-  (:method ((in integer) &optional n)
+(defgeneric kaprekar-constant (in &key n r)
+  (:documentation "Application of the Kaprekar's algorithm for a list of integers of base n.")
+  (:method ((in list) &key (n 10) (r *cycle-default-value*))
+    (res-l (a-kaprekar-l in n) r))
+  (:method ((in integer) &key n (r *cycle-default-value*))
     (declare (ignore n))
-    (kaprekar-constant (10->n in 10)))
-  (:method ((in t) &optional n)
-    (declare (ignore in n)) nil))
+    (kaprekar-constant (10->n in 10) :r r))
+  (:method ((in t) &key n r)
+    (declare (ignore in n r)) nil))
 
 (defgeneric rhythmic-sieve (crible &key field-x i j optimize)
   (:documentation "Realize the matrix i j -- if it exists -- to allow a given sieve to be shifted by one step horizontally and vertically in order to realize two cycles.
@@ -22,7 +21,7 @@ When 'optimize' is set to :in-field-x, the optimisation is done inside the limit
   (:method ((crible t) &key field-x i j optimize)
     (declare (ignore crible field-x i j optimize)) nil))
 
-(defgeneric pea-pattern (in)
+(defgeneric pea-pattern (in &key r)
     (:documentation "The pea pattern is a variation of the look-and-say sequence that consists to read off the digits of the previous number, counting the number of digits in groups of the same digit, and read them in ascending order until the sequence becomes the comment of themself.
 For example:
 1 is read off as 'one 1' or 11
@@ -31,33 +30,31 @@ For example:
 1112 is read off as 'three 1, one 2' or 3112
 and so one until 21322314 which is its own comment.
 The result is the path leading to the cycle -- if it exists -- and the cycle itself.")
-  (:method ((in list))
-    (commentaire-cyclique1 in))
-  (:method ((in integer))
-    (pea-pattern (10->n in 10)))
-  (:method ((in t))
-    (declare (ignore in)) nil))
+  (:method ((in list) &key (r *cycle-default-value*))
+    (res-l (commentaire-cyclique1 in) r))
+  (:method ((in integer) &key (r *cycle-default-value*))
+    (pea-pattern (10->n in 10) :r r))
+  (:method ((in t) &key r)
+    (declare (ignore in r)) nil))
 
 (defgeneric symmetric-group (lst)
   (:documentation "The symmetric group allows to enumerate all cycles from a list according the position of its elements.")
   (:method ((lst list))
-    (let ((tmp (cfp1 lst)))
-      (when tmp (list tmp))))
+    (let ((tmp (cfp1 lst))) tmp))
   (:method ((lst t))
     (declare (ignore lst)) nil))
 
 (defgeneric symmetric-permutation (lst code-lst)
   (:documentation "The symmetric permutation consists to attribute a number -- from the code-lst -- to a given set of chromatic durations (or any kind of symbols) and to read them always in the same order.")
   (:method ((lst list) (code-lst list))
-    (list (butlast (perm-sym1 lst code-lst))))
+    (butlast (perm-sym1 lst code-lst)))
   (:method ((lst t) (code-lst t))
     (declare (ignore lst code-lst)) nil))
 
 (defgeneric circular-permutation (lst init-base circ-base)
   (:documentation "Returns a converted circular permutation done in circ-base to the init-base.")
   (:method ((lst list) (init-base integer) (circ-base integer))
-    (let ((tmp (a-fill-lst (butlast (p-c-b lst init-base circ-base)))))
-      (when tmp (list tmp))))
+    (let ((tmp (a-fill-lst (butlast (p-c-b lst init-base circ-base))))) tmp))
   (:method ((lst t) (init-base t) (circ-base t))
     (declare (ignore lst init-base circ-base)) nil))
 
@@ -68,38 +65,37 @@ The result is the path leading to the cycle -- if it exists -- and the cycle its
   (:method ((lst t) &optional ind)
     (declare (ignore lst ind)) nil))
 
-(defgeneric lorenz-discretisation (x)
-  (:documentation "Returns the cycle done from the starting point x between 0 and 1 by doubling its value in modulo 1.
-The result is the path leading to the cycle -- if it exists -- and the cycle itself.")
-  (:method ((x number))
-    (l-d x))
-  (:method ((x t))
-    (declare (ignore x)) nil))
+(defgeneric lorenz-discretisation (x &key r)
+  (:documentation "Returns the cycle done from the starting point x between 0 and 1 by doubling its value in modulo 1.")
+  (:method ((x number) &key (r *cycle-default-value*))
+    (res-l (l-d x) r))
+  (:method ((x t) &key r)
+    (declare (ignore x r)) nil))
 
-(defgeneric collatz-conjecture (x)
+(defgeneric collatz-conjecture (x &key r)
   (:documentation "Returns the conjectural cycle (4 2 1) according to the initial value x such as:
 if x is even then divide x by 2,
-if x is odd then multiply x by 3 and add 1.
-Note that the interesting part is the path leading to the trivial cycle (4 2 1).")
-  (:method ((x integer))
-    (cond ((= 1 x) (list (list 1) (list 4 2 1)))
-	  ((= 2 x) (list (list 2 1) (list 4 2 1)))
-	  ((= 4 x) (list (list 4 2 1)))
-	  (t (a-collatz x))))
-  (:method ((x t))
-    (declare (ignore x)) nil))
+if x is odd then multiply x by 3 and add 1.")
+  (:method ((x integer) &key (r *cycle-default-value*))
+    (let ((tmp (cond ((= 1 x) (list (list 1) (list 4 2 1)))
+		     ((= 2 x) (list (list 2 1) (list 4 2 1)))
+		     ((= 4 x) (list (list 4 2 1)))
+		     (t (a-collatz x)))))
+      (res-l tmp r)))
+  (:method ((x t) &key r)
+    (declare (ignore x r)) nil))
 
 (defgeneric interlace-cycle (&rest motifs)
   (:documentation "Depending on the length of each list, a cycle is generated according to the least common multiple. So, each list will be repeated
 lcm(Union^n_i=1 |l_i|)/|l_i| times to complete the motivational cycle of interlacing.
-The first value is the interlace cycle, the second value is the number of repetition of each respective list as arguments.")
+The function returns two values. The first value is the interlace cycle, the second value is the number of repetition of each respective list as arguments.")
   (:method (&rest motifs)
     (when (loop for i in motifs always (listp i))
       (let* ((lst (remove nil motifs))
 	     (len (mapcar #'length lst))
 	     (n (apply #'lcm len)))
 	(values
-	 (list (apply #'mapcar #'list (loop for e in lst collect (loop repeat (/ n (length e)) append e))))
+	 (apply #'mapcar #'list (loop for e in lst collect (loop repeat (/ n (length e)) append e)))
 	 (mapcar #'(lambda (x) (/ n x)) len))))))
   
 (defgeneric euclidean-rhythm (n m &key ratio)
@@ -108,8 +104,8 @@ The first value is the interlace cycle, the second value is the number of repeti
     (let ((tmp (rtm-euclidean m n)))
       (when tmp
 	(if ratio
-	    (let (r s) (loop for i in tmp if (= 1 i) do (push (length s) r) (setf s (list i)) else do (push i s)) (list (reverse (butlast (push (length s) r)))))
-	    (list tmp)))))
+	    (let (r s) (loop for i in tmp if (= 1 i) do (push (length s) r) (setf s (list i)) else do (push i s)) (reverse (butlast (push (length s) r))))
+	    tmp))))
   (:method ((n t) (m t) &key ratio)
     (declare (ignore n m ratio)) nil))
 

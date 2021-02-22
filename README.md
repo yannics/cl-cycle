@@ -10,8 +10,19 @@ Thus, it is possible to consider the construction of musical representations of 
 In other words, it must be possible to report an association between network composition, performance and listening ...
 
 
-The result of each algorithm is a list including the cycle itself prepended by its _path_ if it exists.
+The result of each algorithm is the _cycle_ itself if it exists –– except for the `SYMMETRIC-GROUP` which is a list of cycles. Some of them can be prepended by its _path_ if it exists. This concerns only the algorithms `KAPREKAR-CONSTANT`, `PEA-PATTERN`, `LORENZ-DISCRETISATION` and `COLLATZ-CONJECTURE`.
 
+The following keywords allow formatting if needed the result as argument of `:r`, i.e. the  keyword argument of the involved function:
+
+- `:seq`   -----> (__append__ _path_ _cycle_)
+
+-  `:lst`   -----> (__list__ _path_ _cycle_)
+
+-  `:path`  ----> _path_
+
+-  `:cycle` ---> _cycle_
+
+The default keyword value is set by the global variable `*cycle-default-value*` as `:seq`.
 ## Algorithms
 
 - - - -
