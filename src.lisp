@@ -1,4 +1,4 @@
-;;;  cl-cycle version 1.21.3
+;;;  cl-cycle version 1.22.9
 ;;;  use freely and at your own risk :)
 
 (in-package :cl-cycle)
@@ -136,7 +136,7 @@ Otherwise the result is a cycle if it exists, except for the SYMMETRIC-GROUP whi
 (defun groupn (lst n)
   (let (r)
     (dotimes (i n (reverse r)) (push (nth i lst) r))))
-
+ 
 (defun all-sub-g (lst)
   (let (r)
     (loop for x from 1 to (- (length lst) 1)
@@ -402,7 +402,8 @@ Otherwise the result is a cycle if it exists, except for the SYMMETRIC-GROUP whi
     (let ((r (list (car l))))
       (loop until (assoc (cadr (car r)) r)
             do
-            (push (assoc (cadr (car r)) l) r)) (reverse r))))
+               (push (assoc (cadr (car r)) l) r))
+      (reverse r))))
 
 (defun rem-assoc (l1 l2)
   (let (r)
@@ -418,13 +419,7 @@ Otherwise the result is a cycle if it exists, except for the SYMMETRIC-GROUP whi
 
 (defun cfp1 (lst)
   (when (and (bc-test lst nil) (equalp (list-mod (length lst)) (sort (copy-tree lst) #'<)))
-    (let ((r) (s (mapcar 'list (list-mod (length lst)) (sort (copy-tree lst) #'<))))
-      (loop for i in (c-f-p (2list lst))
-            do
-            (push
-             (let (z)
-               (dolist (e i (mapcar #'cadr (reverse z)))
-                 (push (assoc e s) z))) r)) (reverse r))))
+    (c-f-p (2list lst))))
 
 ;;;;-----------------------;;;;
 ;;;; lorenz-discretisation ;;;;
@@ -473,7 +468,40 @@ Otherwise the result is a cycle if it exists, except for the SYMMETRIC-GROUP whi
 			   (cond ((> (length head) (length tail)) (make-list (- (length head) (length tail)) :initial-element (car head)))
 				 ((< (length head) (length tail)) (make-list (- (length tail) (length head)) :initial-element (car tail)))
 				 (t nil)))))))
-  
+
+
+;;;;-----------------------;;;;
+;;;; recursive-campanology ;;;;
+;;;;-----------------------;;;;
+
+(defun swap-neighbors (n lst &optional tmp)
+  ;n -> int, of first item to swap with item immediately after.
+  ;lst -> list, of items
+  ;e.g. (swap-neighbors 2 '(a b c d e f)) return -> '(a b d c e f)
+  (if (< -1 n (1- (length lst)))
+      (progn
+	(loop repeat n do
+	  (setq tmp (cons (car lst) tmp))
+	  (setq lst (cdr lst)))
+	(append (reverse tmp)
+		(list (cadr lst) (car lst))
+		(cddr lst)))
+      lst))
+
+(defun campanology (lst mode)
+  (cons lst
+	(let ((rec lst))
+	  (loop for x from 0 to (1- (length lst))
+		collect
+		(let ((tmp rec))
+		  (loop for i from (if
+				    (case mode
+				      (0 (oddp x))
+				      (1 (evenp x)))
+				    0 1)
+			  to (length lst) by 2 do (setf tmp (swap-neighbors i tmp)))
+		  (setf rec tmp) tmp)))))
+
 ;;;;-------;;;;
 ;;;; utils ;;;;
 ;;;;-------;;;;

@@ -109,6 +109,12 @@ The function returns two values. The first value is the interlace cycle, the sec
   (:method ((n t) (m t) &key ratio)
     (declare (ignore n m ratio)) nil))
 
+(defgeneric campanology-permutation (lst mode)
+  (:documentation "Application of the 'hunting group' algorithm according to two mode as 0 for the first position and 1 for the second position.")
+  (:method ((lst list) (mode integer)) (append (campanology lst mode) (cdr (butlast (campanology (reverse lst) (case mode (0 (if (oddp (length lst)) 1 0)) (1 (if (evenp (length lst)) 1 0))))))))
+  (:method ((in integer) (mode integer)) (mapcar #'(lambda (x) (n->10 x 10)) (campanology-permutation (10->n in 10) mode)))
+  (:method ((lst t) (mode t)) (declare (ignore lst mode)) nil))
+
 ;;;-----------------------------------------------------------------
 
 (defgeneric 10->n (x n)

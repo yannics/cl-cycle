@@ -58,7 +58,7 @@ Primarily developed by John Conway, the pea pattern is a variation of a _look-an
 `[ SYMMETRIC-GROUP ]`
 
 1. Mathematical overview
->[http://math.univ-lyon1.fr/capes/IMG/pdf/cycles.pdf](http://math.univ-lyon1.fr/capes/IMG/pdf/cycles.pdf)
+>[https://doczz.fr/doc/1976848/permutations-et-cycles](https://doczz.fr/doc/1976848/permutations-et-cycles)
 
 2. Musical application
 >[http://www.entretemps.asso.fr/Nicolas/TextesNic/Barraque.html](http://www.entretemps.asso.fr/Nicolas/TextesNic/Barraque.html)
@@ -132,3 +132,18 @@ The result is a list where each element groups the circular permutations of each
 >[http://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf](http://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf)
 
 Application of Bjorklund's algorithm of uniformly distributing some rhythmic impacts in a given interval of rhythmic units –– according to Euclid's algorithm determining the greatest common divisor (GCD) [Book VII of the Elements of Euclid].
+
+- - - -
+
+`[ CAMPANOLOGY-PERMUTATION ]`
+
+As a musical study of bells, campanology focuses on the ringing methods according to the two following rules:
+
+1. Each bell sounds exactly once in each row.
+2. In any change, each bell can move at most one position.
+
+The algorithm provides a trivial solution – called the 'hunting group' – by permuting consecutive pairs and alternating the starting position between the first and the second position.
+
+> White, A., & Wilson, R. (1995). **The Hunting Group**. *The Mathematical Gazette*, 79(484), 5–16. https://doi.org/10.2307/3619985
+
+Thanks to [Dom Aversano](https://www.domaversano.com/) for relating to this algorithm.

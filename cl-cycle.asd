@@ -7,7 +7,7 @@
   :author "Yann Ics"
   :maintainer "Yann Ics"
   :description "Cycle Generator"
-  :version "1.21.3"
+  :version "1.22.9"
   :serial t
   :components
   (
