@@ -1,4 +1,4 @@
-;;;  cl-cycle version 1.22.9
+;;;  cl-cycle version 1.24.3
 ;;;  use freely and at your own risk :)
 
 (in-package :cl-cycle)
@@ -470,9 +470,9 @@ Otherwise the result is a cycle if it exists, except for the SYMMETRIC-GROUP whi
 				 (t nil)))))))
 
 
-;;;;-----------------------;;;;
-;;;; recursive-campanology ;;;;
-;;;;-----------------------;;;;
+;;;;-------------------------;;;;
+;;;; campanology-permutation ;;;;
+;;;;-------------------------;;;;
 
 (defun swap-neighbors (n lst &optional tmp)
   ;n -> int, of first item to swap with item immediately after.
@@ -501,6 +501,26 @@ Otherwise the result is a cycle if it exists, except for the SYMMETRIC-GROUP whi
 				    0 1)
 			  to (length lst) by 2 do (setf tmp (swap-neighbors i tmp)))
 		  (setf rec tmp) tmp)))))
+
+;;;;--------------------;;;;
+;;;; discrete-logarithm ;;;;
+;;;;--------------------;;;;
+
+(defvar *max-length-sm* 10000)
+
+(defun square&multiply (n exp)
+  (let ((res 1) (e (10->N exp 2)))
+    (loop for i in e do
+      (setf res (* res res)) 
+      (if (= 1 i) (setf res (* res n))))
+    res))
+
+(defun mod-exp (g p &optional (i 1) res)
+  (let ((sm (mod (square&multiply g i) p)))
+    (when (> (length res) *max-length-sm*) (error "The cycle reaches the limit of its length defined by the global variable *max-length-sm*.~&~S~&" (reverse res)))
+    (if (member sm res)
+	(reverse res)
+	(mod-exp g p (1+ i) (cons sm res)))))
 
 ;;;;-------;;;;
 ;;;; utils ;;;;

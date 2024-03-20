@@ -115,6 +115,11 @@ The function returns two values. The first value is the interlace cycle, the sec
   (:method ((in integer) (mode integer)) (mapcar #'(lambda (x) (n->10 x 10)) (campanology-permutation (10->n in 10) mode)))
   (:method ((lst t) (mode t)) (declare (ignore lst mode)) nil))
 
+(defgeneric discrete-logarithm (g p)
+  (:documentation "The discrete logarithm forms a cyclic group computed with its reciprocal modular exponential g^i mod p.")
+  (:method ((g integer) (p integer)) (mod-exp g p))
+  (:method ((g t) (p t)) (declare (ignore g p)) nil))
+
 ;;;-----------------------------------------------------------------
 
 (defgeneric 10->n (x n)
